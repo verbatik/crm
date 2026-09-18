@@ -1,3 +1,5 @@
+import freeEmailDomains from "free-email-domains";
+
 export function normalizeDomain(
 	input: string | null | undefined,
 ): string | null {
@@ -23,13 +25,18 @@ export function normalizeDomain(
 export function domainFromEmail(
 	email: string | null | undefined,
 ): string | null {
-	const at = email?.trim().toLowerCase().lastIndexOf("@") ?? -1;
+	const normalized = email?.trim().toLowerCase();
+	const at = normalized?.lastIndexOf("@") ?? -1;
 	if (at < 1) return null;
-	const domain = normalizeDomain(email?.slice(at + 1));
+	const domain = normalizeDomain(normalized?.slice(at + 1));
 	if (!domain) return null;
 	return FREE_EMAIL_DOMAINS.has(domain) || isMachineDomain(domain)
 		? null
 		: domain;
+}
+
+export function isPersonalEmailDomain(domain: string): boolean {
+	return FREE_EMAIL_DOMAINS.has(domain.toLowerCase());
 }
 
 export function isMachineDomain(input: string | null | undefined): boolean {
@@ -43,6 +50,7 @@ export function isMachineDomain(input: string | null | undefined): boolean {
 }
 
 const FREE_EMAIL_DOMAINS = new Set([
+	...freeEmailDomains,
 	"gmail.com",
 	"googlemail.com",
 	"yahoo.com",

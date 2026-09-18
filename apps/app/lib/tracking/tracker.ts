@@ -15,6 +15,7 @@ export function trackerSource(
 var C=${JSON.stringify(config)},E=${JSON.stringify(endpoint)},N=${JSON.stringify(COOKIE_NAME)},FS=${JSON.stringify(COOKIE_FIRST_TOUCH)};
 var B=${MAX_BODY_BYTES},M=${MAX_EVENTS_PER_BATCH};
 var d=document,w=window,loc=w.location;
+var tag=d.querySelector("script[src*='/t/crm.js']")||d.currentScript,forms=!(tag&&tag.getAttribute("data-forms")==="off"),clicks=!(tag&&tag.getAttribute("data-clicks")==="off");
 if(w.__crmT)return;w.__crmT=1;
 function host(){return loc.hostname.toLowerCase()}
 function known(h){
@@ -148,8 +149,8 @@ function decorate(){
   el.href=u.toString()},!0)}
 function start(){
  view();
- d.addEventListener("click",onClick,!0);
- d.addEventListener("submit",onSubmit,!0);
+ if(clicks)d.addEventListener("click",onClick,!0);
+ if(forms)d.addEventListener("submit",onSubmit,!0);
  d.addEventListener("visibilitychange",function(){if(d.visibilityState==="hidden")flush()});
  w.addEventListener("pagehide",flush);
  decorate();

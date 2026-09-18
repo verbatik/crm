@@ -43,6 +43,7 @@
 		"class-transformer": "^0.5.1",
 		"class-validator": "^0.15.1",
 		"context.dev": "^2.7.0",
+		"free-email-domains": "1.12.1",
 		"helmet": "^8.3.0",
 		"keyv": "^5",
 		"keyv-upstash": "1.0.8",

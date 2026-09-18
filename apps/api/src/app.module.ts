@@ -30,6 +30,7 @@ import { SavedViewsModule } from "./saved-views/saved-views.module";
 import { SearchModule } from "./search/search.module";
 import { SettingsModule } from "./settings/settings.module";
 import { SlackModule } from "./slack/slack.module";
+import { SpeechyouModule } from "./speechyou/speechyou.module";
 import { SsoModule } from "./sso/sso.module";
 import { SyncModule } from "./sync/sync.module";
 import { TelemetryModule } from "./telemetry/telemetry.module";
@@ -77,6 +78,7 @@ import { WorkspaceModule } from "./workspace/workspace.module";
 		BackfillModule,
 		TelemetryModule,
 		TrackingModule,
+		SpeechyouModule,
 		ArchiveModule,
 		SavedViewsModule,
 	],

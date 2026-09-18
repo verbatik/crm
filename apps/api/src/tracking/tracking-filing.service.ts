@@ -9,7 +9,7 @@ import {
 import { Injectable, Logger } from "@nestjs/common";
 import { AgentTriggerService } from "../agent/agent-trigger.service";
 import { CompanyDirectoryService } from "../companies/company-directory.service";
-import { isMachineDomain } from "../companies/domain";
+import { isMachineDomain, isPersonalEmailDomain } from "../companies/domain";
 import { ActivityStampService } from "../crm/activity-stamp.service";
 import { normalizeEmail } from "../crm/values";
 import { InjectDatabase } from "../database/database.constants";
@@ -74,6 +74,10 @@ export class TrackingFilingService {
 
 		const domain = email.split("@")[1] ?? null;
 		if (!domain) return this.skip(submission.id, "No usable domain");
+
+		if (isPersonalEmailDomain(domain)) {
+			return this.skip(submission.id, "Personal email provider");
+		}
 
 		if (isMachineDomain(domain)) {
 			return this.skip(submission.id, "Not a domain a human reads");

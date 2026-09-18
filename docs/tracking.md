@@ -240,3 +240,11 @@ everybody: a member's render would fire a request that can only be refused.
 | `apps/api/src/tracking/` | Collector, config cache, ingest, filing, counters, rollup, retention, tRPC router |
 | `apps/app/app/(app)/[slug]/settings/tracking/` | The settings page |
 | `apps/app/components/crm/website-activity.tsx` | The record-sheet section, which renders its own heading so it can render nothing at all |
+
+### Speechyou app tracking
+
+The Speechyou app installs the site tag with `data-forms="off"` and `data-clicks="off"`.
+Page views remain enabled. Account synchronization supplies confirmed names, business emails,
+languages, and visitor IDs. Private app form values and button labels stay in the app.
+Known personal and disposable email providers do not create contacts from tracked forms.
+The provider list comes from the pinned `free-email-domains` dependency.

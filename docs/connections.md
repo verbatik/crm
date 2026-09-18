@@ -230,3 +230,19 @@ icon marks are used at these sizes; the wordmarks stay unused.
 
 Docusign is spelled with a lowercase s since its 2024 rebrand. The note-taker is
 **Ergo**.
+
+### Speechyou accounts
+
+`POST /integrations/speechyou/accounts` accepts up to 50 account records with
+`Authorization: Bearer <SPEECHYOU_SYNC_SECRET>`. Each record includes `id`, `email`,
+`name`, `lastName`, and `language`; `visitorId` is optional.
+The endpoint returns `synced`, `ignored`, or `retry` for each account ID.
+Personal providers and suppressed or archived contacts are ignored. Repeated requests update
+the same contact. Names, business domains, and languages appear in existing CRM contact fields.
+Unknown language never replaces a saved language. Imports do not start paid research jobs.
+
+The Speechyou app persists sync fingerprints in `crm_contact_sync`. Its five-minute cron
+retries unsynchronized accounts and detects name, email, language, and visitor changes.
+Sign-in attempts immediate synchronization. Apply its additive `0020_crm_contact_sync.sql`
+migration before enabling the shared secret. Historical language remains unknown until
+a user selects a language or signs in with an existing language cookie.

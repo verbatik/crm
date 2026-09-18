@@ -211,3 +211,9 @@ is sent. No client is constructed, so there is no queue waiting to flush later.
   cache entries under `speechyou-crm`. Without either complete configuration,
   the cache is per-instance in-memory.
 - **Sign-in method** — Google and Microsoft are in code; an IdP is a row (SSO, in `api.md`).
+
+### Speechyou account synchronization
+
+`SPEECHYOU_SYNC_SECRET` is an optional server-only key shared with the Speechyou app.
+It protects `POST /integrations/speechyou/accounts`. Generate 32 random bytes.
+Store the same value in both production environments. Never expose it through a public variable.
