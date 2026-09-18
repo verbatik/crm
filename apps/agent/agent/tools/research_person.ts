@@ -26,7 +26,7 @@ export default defineTool({
 		if (!charge.ok) return { ok: false as const, reason: charge.reason };
 
 		const answer = await ask(question, {
-			model: deep ? "sonar-pro" : "sonar",
+			preset: deep ? "low" : "fast",
 			system:
 				"You are researching for a B2B sales rep. Be specific and factual. " +
 				"State only what your sources support, prefer recent information, and " +

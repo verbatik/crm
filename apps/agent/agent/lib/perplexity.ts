@@ -1,5 +1,18 @@
-const ENDPOINT = "https://api.perplexity.ai/chat/completions";
-const TIMEOUT_MS = 45_000;
+import { z } from "zod";
+import { PERPLEXITY } from "./perplexity-config";
+
+const responseSchema = z.object({
+	status: z.literal("completed"),
+	output: z.array(
+		z.object({
+			type: z.string(),
+			content: z
+				.array(z.object({ type: z.string(), text: z.string().optional() }))
+				.optional(),
+			results: z.array(z.object({ url: z.string().url() })).optional(),
+		}),
+	),
+});
 
 export type Answer = {
 	text: string;
@@ -13,7 +26,7 @@ export function perplexityEnabled(): boolean {
 }
 
 export type AskOptions = {
-	model?: "sonar" | "sonar-pro";
+	preset?: "fast" | "low";
 	domains?: string[];
 	system?: string;
 };
@@ -26,10 +39,10 @@ export async function ask(
 	if (!apiKey) return { ok: false, reason: "No PERPLEXITY_API_KEY." };
 
 	const controller = new AbortController();
-	const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+	const timer = setTimeout(() => controller.abort(), PERPLEXITY.timeoutMs);
 
 	try {
-		const response = await fetch(ENDPOINT, {
+		const response = await fetch(PERPLEXITY.endpoint, {
 			method: "POST",
 			headers: {
 				authorization: `Bearer ${apiKey}`,
@@ -37,14 +50,15 @@ export async function ask(
 			},
 			signal: controller.signal,
 			body: JSON.stringify({
-				model: options.model ?? "sonar",
-				messages: [
-					...(options.system
-						? [{ role: "system", content: options.system }]
-						: []),
-					{ role: "user", content: question },
+				preset: options.preset ?? PERPLEXITY.defaultPreset,
+				input: question,
+				instructions: options.system,
+				tools: [
+					{
+						type: "web_search",
+						filters: { search_domain_filter: options.domains },
+					},
 				],
-				search_domain_filter: options.domains,
 			}),
 		});
 
@@ -52,18 +66,27 @@ export async function ask(
 			return { ok: false, reason: `HTTP ${response.status}` };
 		}
 
-		const body = (await response.json()) as {
-			choices?: { message?: { content?: string } }[];
-			citations?: string[];
-			search_results?: { url?: string }[];
-		};
-
-		const text = body.choices?.[0]?.message?.content?.trim() ?? "";
+		const parsed = responseSchema.safeParse(await response.json());
+		if (!parsed.success)
+			return { ok: false, reason: "Invalid or incomplete research response." };
+		const body = parsed.data;
+		const text = body.output
+			.filter((item) => item.type === "message")
+			.flatMap((item) => item.content ?? [])
+			.filter((item) => item.type === "output_text")
+			.map((item) => item.text ?? "")
+			.join("\n")
+			.trim();
 		if (!text) return { ok: false, reason: "Empty answer." };
 
-		const citations =
-			body.citations ??
-			(body.search_results ?? []).flatMap((r) => (r.url ? [r.url] : []));
+		const citations = [
+			...new Set(
+				body.output
+					.filter((item) => item.type === "search_results")
+					.flatMap((item) => item.results ?? [])
+					.map((result) => result.url),
+			),
+		];
 
 		return { ok: true, data: { text, citations } };
 	} catch (error) {
@@ -71,7 +94,7 @@ export async function ask(
 		return {
 			ok: false,
 			reason: aborted
-				? `Timed out after ${TIMEOUT_MS}ms.`
+				? `Timed out after ${PERPLEXITY.timeoutMs}ms.`
 				: error instanceof Error
 					? error.message
 					: String(error),

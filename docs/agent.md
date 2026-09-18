@@ -210,6 +210,11 @@ wrong in the direction that looks useful.
 
 ## Optional by default
 
+Perplexity research uses `POST /v1/agent` with the `fast` preset. Deep research uses
+`low`. Requests include `web_search`; domain filters belong to that tool. The
+adapter validates completed responses and reads text and source URLs from `output`.
+The legacy chat completions endpoint rejects this installation's key.
+
 `lib/capabilities.ts` is the single place that knows what is set: prints it at boot,
 states it in the session instructions, and gives tools a shared "not configured,
 retrying will not help" result — **checked before the research budget is charged**. A
