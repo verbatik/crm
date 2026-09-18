@@ -19,11 +19,10 @@ import { Prisma, type User } from "@crm/db";
 
 ## Setup
 
-```bash
-docker compose up -d       # Postgres matching the DATABASE_URL in .env.example
-cp .env.example .env       # at the repo root
-bun run db:generate        # generate Prisma Client
-bun run db:deploy          # apply the migrations
+This installation uses PlanetScale. Configure the root `.env`, then run:
+
+```sh
+./.scratch/bun .scratch/prepare-db.ts
 ```
 
 `DATABASE_URL` comes from the **repo-root `.env`**, loaded by `@crm/env` — see

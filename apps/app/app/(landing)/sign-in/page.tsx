@@ -90,7 +90,7 @@ async function SignIn({
 			<>
 				<AuthHeading
 					title="No way in yet"
-					description="This CRM has no sign-in method configured, so nobody can get in — including you."
+					description="Speechyou has no sign-in method configured yet."
 				/>
 
 				<p className="text-center text-muted-foreground text-sm/5">

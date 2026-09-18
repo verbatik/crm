@@ -65,7 +65,7 @@ export async function createApp(): Promise<NestExpressApplication> {
 			const { appRouter } = app.get(AppRouterHost);
 
 			const trpcDocument = generateOpenApiDocument(appRouter, {
-				title: "CRM API — tRPC bridge",
+				title: "Speechyou CRM API — tRPC bridge",
 				description:
 					"Every tRPC procedure, reachable over REST for tooling that cannot speak tRPC. Same validation, same middlewares, same services as the tRPC transport — this only translates the wire format.",
 				version: "1.0",
@@ -74,9 +74,9 @@ export async function createApp(): Promise<NestExpressApplication> {
 			});
 
 			const swaggerConfig = new DocumentBuilder()
-				.setTitle("CRM API")
+				.setTitle("Speechyou CRM API")
 				.setDescription(
-					`REST surface of the CRM API — auth, health, the internal cron routes, and a generated REST bridge (under ${REST_BRIDGE_PATH}) for every tRPC procedure.`,
+					`REST surface of the Speechyou CRM API — auth, health, the internal cron routes, and a generated REST bridge (under ${REST_BRIDGE_PATH}) for every tRPC procedure.`,
 				)
 				.setVersion("1.0")
 				.addCookieAuth(SESSION_COOKIE_NAME)

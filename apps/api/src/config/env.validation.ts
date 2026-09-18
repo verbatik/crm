@@ -30,7 +30,7 @@ export class EnvironmentVariables {
 	@IsString()
 	@MinLength(1, {
 		message:
-			"DATABASE_URL is required. `docker compose up -d` starts one, or set it to any Postgres connection string.",
+			"DATABASE_URL is required. Set it to your PlanetScale Postgres connection string.",
 	})
 	DATABASE_URL!: string;
 
@@ -91,6 +91,14 @@ export class EnvironmentVariables {
 	@IsOptional()
 	@IsString()
 	REDIS_URL?: string;
+
+	@IsOptional()
+	@IsUrl({ protocols: ["https"], require_protocol: true })
+	UPSTASH_REDIS_REST_URL?: string;
+
+	@IsOptional()
+	@IsString()
+	UPSTASH_REDIS_REST_TOKEN?: string;
 
 	@IsOptional()
 	@Type(() => Number)

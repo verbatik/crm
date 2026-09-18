@@ -206,6 +206,8 @@ is sent. No client is constructed, so there is no queue waiting to flush later.
 ## Not env vars
 
 - **Cache TTL** — `DEFAULT_TTL_MS` (60s) in `cache.module.ts`; `CACHE_TTL_MS` overrides.
-- **Redis** — optional; without `REDIS_URL` the cache is per-instance in-memory, which
-  is wrong for multi-instance.
+- **Redis** — set `REDIS_URL` or both `UPSTASH_REDIS_REST_URL` and
+  `UPSTASH_REDIS_REST_TOKEN`. The Upstash REST pair takes priority and namespaces
+  cache entries under `speechyou-crm`. Without either complete configuration,
+  the cache is per-instance in-memory.
 - **Sign-in method** — Google and Microsoft are in code; an IdP is a row (SSO, in `api.md`).

@@ -11,6 +11,7 @@
 # deployment. See docs/environment.md.
 .env
 .env.*
+.scratch
 
 # Build output and caches — regenerated in the build container. `.vercel/output`
 # especially: uploading a local Build Output API directory invites the build to

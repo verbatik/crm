@@ -1,6 +1,6 @@
 {
-	"name": "Comp AI CRM",
-	"short_name": "Comp AI CRM",
+	"name": "Speechyou CRM",
+	"short_name": "Speechyou",
 	"icons": [
 		{
 			"src": "/web-app-manifest-192x192.png",
@@ -15,7 +15,7 @@
 			"purpose": "maskable"
 		}
 	],
-	"theme_color": "#ffffff",
+	"theme_color": "#3f51b5",
 	"background_color": "#ffffff",
 	"display": "standalone"
 }

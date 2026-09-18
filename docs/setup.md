@@ -4,25 +4,25 @@ Operational detail moved out of the rule docs. `api.md`, `agent.md` and
 `environment.md` are what agents read before changing code; this is what a person
 reads once.
 
-## First run
+## Speechyou development
+
+This installation uses PlanetScale Postgres. No local Postgres service is required.
+The root `.env` holds the pooled application URL and the direct migration URL.
 
 ```sh
-cp .env.example .env        # fill DATABASE_URL, BETTER_AUTH_SECRET, ALLOWED_SIGN_IN
-docker compose up -d        # Postgres, matching .env.example
-bun run db:migrate && bun run db:seed
-bun run dev                 # app :3000, api :3001, agent :2000
+./.scratch/dev
 ```
 
-Prisma from the repo root: `db:generate`, `db:migrate`, `db:push`, `db:reset`,
-`db:seed`, `db:studio`, `db:deploy`.
+The workspace launcher selects the installed Node and Bun versions, applies pending migrations
+through `DIRECT_DATABASE_URL`, checks schema drift, and starts the app, API, and agent.
+The application uses `DATABASE_URL` through the pooler.
+See `.scratch/SETUP.md` for credentials and individual service commands.
 
-`dev` depends on `^dev:prepare`, so every start applies pending migrations and
-regenerates the Prisma client before a single server boots. That is why the first
-run needs `db:migrate` only for the seed that follows it. When the database and
-`schema.prisma` have diverged past what `migrate deploy` can reconcile,
-`dev:prepare` stops the whole run rather than starting servers against a schema
-they do not match — reconcile with `db:migrate`, or `db:reset` when the divergence
-is an edited migration that has already been applied.
+The upstream `bun run dev` task refuses remote databases by default.
+Use the workspace launcher for this PlanetScale installation.
+
+Integration tests require a separate disposable database in `TEST_DATABASE_URL`.
+The configured PlanetScale application database is not a test database.
 
 ## Google Cloud
 

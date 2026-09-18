@@ -58,7 +58,7 @@ here, what do we sell.
 - **Onboarded state is `onboardedAt` inside the plugin's `metadata` blob**, not a
   column; `isOnboarded`/`markOnboarded` (`@crm/db/workspace`) are the only accessors,
   and `markOnboarded` preserves every other key.
-- **The name starts as `DEFAULT_WORKSPACE_NAME` (`CRM`), a placeholder not an
+- **The name starts as `DEFAULT_WORKSPACE_NAME` (`Speechyou`), a placeholder not an
   answer.** The header renders `<name> CRM`, so `workspaceLabel` tests the name rather
   than comparing to the default.
 - **The website queues the agent's `workspace-profile` task** and goes through
@@ -84,7 +84,7 @@ request.
 
 ### The name is also the URL
 
-Served under the workspace slug (`/comp-ai/companies`). **Cosmetic, not tenancy** —
+Served under the workspace slug (`/speechyou/companies`). **Cosmetic, not tenancy** —
 every query still resolves through `WORKSPACE_ID`.
 
 - **The slug is the plugin's column**, written by `workspaceSlug(name)`
